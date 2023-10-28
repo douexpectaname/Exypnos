@@ -4,9 +4,6 @@
 
 package com.duen.exypnos.ui.app
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,16 +17,20 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.duen.exypnos.ui.rememberCurrentDestination
 import com.duen.exypnos.ui.theme.ExypnosTheme
 
 @Composable
@@ -50,18 +51,12 @@ fun MainApp(windowSize: WindowSizeClass) {
         ) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = "home",
+                startDestination = NavigationDestination.HOME.name.lowercase(),
                 modifier = Modifier.padding(innerPadding)
             ) {
                 NavigationDestination.entries.forEach { dest ->
                     composable(
                         route = dest.name.lowercase(),
-                        enterTransition = {
-                            fadeIn()
-                        },
-                        exitTransition = {
-                            fadeOut()
-                        },
                         content = { dest.destination(windowSize) }
                     )
                 }
@@ -73,13 +68,13 @@ fun MainApp(windowSize: WindowSizeClass) {
 
 @Composable
 private fun MainBottomBar(navController: NavController) {
-    val current = rememberCurrentDestination(navController)
+    val current by navController.currentBackStackEntryAsState()
 
     NavigationBar {
         NavigationDestination.entries.forEach {
             NavigationBarItem(
-                selected = current?.route?.startsWith(it.name, ignoreCase = true) == true,
-                onClick = { navController.navigate(it.name.lowercase()) },
+                selected = it.selected(current),
+                onClick = { it.onClick(navController) },
                 icon = it.icon,
                 label = { Text(text = stringResource(it.nameId)) }
             )
@@ -89,19 +84,34 @@ private fun MainBottomBar(navController: NavController) {
 
 @Composable
 private fun MainRailBar(navController: NavController) {
-    val current = rememberCurrentDestination(navController)
+    val current by navController.currentBackStackEntryAsState()
 
     NavigationRail {
         NavigationDestination.entries.forEach {
             NavigationRailItem(
-                selected = current?.route?.startsWith(it.name, ignoreCase = true) == true,
-                onClick = { navController.navigate(it.name.lowercase()) },
+                selected = it.selected(current),
+                onClick = { it.onClick(navController) },
                 icon = it.icon,
                 label = { Text(stringResource(it.nameId)) }
             )
         }
     }
 }
+
+@Composable
+private fun NavigationDestination.selected(current: NavBackStackEntry?) =
+    current?.destination?.hierarchy?.any { it.route == name.lowercase() } == true
+
+private fun NavigationDestination.onClick(navController: NavController) {
+    navController.navigate(name.lowercase()) {
+        popUpTo(navController.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
 
 @Preview(
     showBackground = true, showSystemUi = true,
@@ -115,7 +125,6 @@ fun AppPreview() {
         )
     }
 }
-
 
 @Preview(
     showBackground = true, device = "spec:parent=pixel_5,orientation=landscape",
