@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.material3.window.size)
     implementation(libs.google.android.material)
+    implementation(libs.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Exypnos</string>
+    <string name="label_home">Home</string>
+    <string name="label_learn">Learn</string>
+    <string name="label_discover">Discover</string>
+    <string name="label_account">Account</string>
 </resources>
