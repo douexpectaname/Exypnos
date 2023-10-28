@@ -1,12 +1,11 @@
 @file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class,
+    ExperimentalMaterial3WindowSizeClassApi::class,
 )
 
 package com.duen.exypnos.ui.app
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
@@ -63,7 +62,6 @@ fun MainApp(windowSize: WindowSizeClass) {
             }
         }
     }
-
 }
 
 @Composable
@@ -111,7 +109,6 @@ private fun NavigationDestination.onClick(navController: NavController) {
         restoreState = true
     }
 }
-
 
 @Preview(
     showBackground = true, showSystemUi = true,
