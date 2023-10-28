@@ -5,4 +5,10 @@
     <string name="label_learn">学习</string>
     <string name="label_discover">发现</string>
     <string name="label_account">我的</string>
+    <string name="text_home_search_hint">搜索穴位、症状和首字母</string>
+    <string name="action_prescription">生成处方</string>
+    <string name="action_acupuncture">查找穴位</string>
+    <string name="action_doctor">问大夫</string>
+    <string name="action_constitution">测体质</string>
+    <string name="label_personal_recommendations">为你推荐</string>
 </resources>
