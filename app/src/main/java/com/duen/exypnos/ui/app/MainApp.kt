@@ -35,6 +35,7 @@ import com.duen.exypnos.ui.theme.ExypnosTheme
 @Composable
 fun MainApp(windowSize: WindowSizeClass) {
     val navController = rememberNavController()
+    Text(text = "hey")
 
     Row {
         if (windowSize.widthSizeClass >= WindowWidthSizeClass.Expanded) {
@@ -51,12 +52,11 @@ fun MainApp(windowSize: WindowSizeClass) {
             NavHost(
                 navController = navController,
                 startDestination = NavigationDestination.HOME.name.lowercase(),
-                modifier = Modifier.padding(innerPadding)
             ) {
                 NavigationDestination.entries.forEach { dest ->
                     composable(
                         route = dest.name.lowercase(),
-                        content = { dest.destination(windowSize) }
+                        content = { dest.destination(windowSize, innerPadding) }
                     )
                 }
             }

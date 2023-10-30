@@ -1,5 +1,6 @@
 package com.duen.exypnos.ui.app
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
@@ -14,12 +15,13 @@ import com.duen.exypnos.ui.home.HomeApp
 enum class NavigationDestination(
     val nameId: Int,
     val icon: @Composable () -> Unit,
-    val destination: @Composable (WindowSizeClass) -> Unit
+    val destination: @Composable (WindowSizeClass, PaddingValues) -> Unit
 ) {
     HOME(
         R.string.label_home,
         { Icon(Icons.Outlined.Home, contentDescription = "") },
-        { HomeApp(it) }),
+        { w, p -> HomeApp(w, p) }
+    ),
     LEARN(
         R.string.label_learn,
         {
@@ -28,7 +30,7 @@ enum class NavigationDestination(
                 contentDescription = ""
             )
         },
-        {}
+        { w, p -> }
     ),
     DISCOVER(
         R.string.label_discover,
@@ -38,13 +40,13 @@ enum class NavigationDestination(
                 contentDescription = ""
             )
         },
-        {}
+        { w, p -> }
     ),
     ACCOUNT(
         R.string.label_account,
         {
             Icon(Icons.Outlined.Person, contentDescription = "")
         },
-        {}
+        { w, p -> }
     )
 }

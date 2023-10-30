@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,7 +64,7 @@ import com.duen.exypnos.ui.theme.PaddingCommon
 import com.duen.exypnos.ui.theme.PaddingSmall
 
 @Composable
-fun HomeApp(windowSize: WindowSizeClass) {
+fun HomeApp(windowSize: WindowSizeClass, innerPadding: PaddingValues) {
     var query by remember {
         mutableStateOf("")
     }
@@ -106,7 +107,8 @@ fun HomeApp(windowSize: WindowSizeClass) {
 
         Column(
             Modifier
-                .padding(top = 72.dp)
+                .padding(innerPadding)
+                .padding(top = 72.dp)b
                 .verticalScroll(rememberScrollState())
         ) {
             Text(
@@ -236,7 +238,8 @@ private fun PrimaryActionCard(
 fun AppPreview() {
     ExypnosTheme {
         HomeApp(
-            windowSize = WindowSizeClass.calculateFromSize(DpSize(420.dp, 1000.dp))
+            windowSize = WindowSizeClass.calculateFromSize(DpSize(420.dp, 1000.dp)),
+            innerPadding = PaddingValues()
         )
     }
 }
@@ -250,7 +253,8 @@ fun AppPreview() {
 fun AppPreviewLandscape() {
     ExypnosTheme {
         HomeApp(
-            windowSize = WindowSizeClass.calculateFromSize(DpSize(10000.dp, 420.dp))
+            windowSize = WindowSizeClass.calculateFromSize(DpSize(10000.dp, 420.dp)),
+            innerPadding = PaddingValues()
         )
     }
 }

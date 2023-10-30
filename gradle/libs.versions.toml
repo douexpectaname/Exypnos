@@ -12,6 +12,7 @@ androidx-appcompat = "1.6.1"
 android-material = "1.10.0"
 compose-material = "1.2.0-alpha10"
 navigation = "2.7.4"
+paging = "3.2.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -30,9 +31,10 @@ ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material" }
 material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "compose-material" }
-google-android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
+android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 material-icon-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
