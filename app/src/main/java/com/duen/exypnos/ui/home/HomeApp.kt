@@ -108,7 +108,7 @@ fun HomeApp(windowSize: WindowSizeClass, innerPadding: PaddingValues) {
         Column(
             Modifier
                 .padding(innerPadding)
-                .padding(top = 72.dp)b
+                .padding(top = 72.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             Text(
