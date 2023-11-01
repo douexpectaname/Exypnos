@@ -12,4 +12,7 @@
     <string name="action_constitution">测体质</string>
     <string name="label_personal_recommendations">为你推荐</string>
     <string name="title_prescription">生成处方</string>
+    <string name="title_discover">发现</string>
+    <string name="title_learn">学习</string>
+    <string name="title_account">我的Exypnos</string>
 </resources>

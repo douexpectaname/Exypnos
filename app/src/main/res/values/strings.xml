@@ -11,4 +11,7 @@
     <string name="action_constitution">Constitution</string>
     <string name="label_personal_recommendations">personal recommendations</string>
     <string name="title_prescription">Prescription</string>
+    <string name="title_discover">Discover</string>
+    <string name="title_learn">Learn</string>
+    <string name="title_account">My Exypnos</string>
 </resources>

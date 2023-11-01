@@ -60,13 +60,13 @@ fun MainApp() {
                     MainBottomBar(navController)
                 }
             },
-        ) { innerPadding ->
+        ) { _ ->
             NavHost(
                 navController = navController,
                 startDestination = NavDestination.HOME.name.lowercase(),
             ) {
                 NavDestination.entries.forEach { dest ->
-                    dest.builder(this, innerPadding)
+                    dest.builder(this)
                 }
             }
         }

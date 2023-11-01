@@ -39,6 +39,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -67,53 +68,44 @@ import com.duen.exypnos.ui.theme.PaddingCommon
 import com.duen.exypnos.ui.theme.PaddingSmall
 
 @Composable
-fun HomeApp(innerPadding: PaddingValues) {
+fun HomeApp() {
     var query by remember {
         mutableStateOf("")
     }
     var active by remember {
         mutableStateOf(false)
     }
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .semantics { isTraversalGroup = true }
-    ) {
-        SearchBar(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .semantics { traversalIndex = -1f },
-            query = query,
-            onQueryChange = { query = it },
-            onSearch = {},
-            active = active,
-            onActiveChange = { active = it },
-            placeholder = { Text(text = stringResource(id = R.string.text_home_search_hint)) },
-            leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = "") },
-            trailingIcon = {
-                AnimatedVisibility(active, enter = fadeIn(), exit = fadeOut()) {
-                    IconButton(
-                        onClick = {
-                            if (query.isEmpty()) {
-                                active = false
-                            } else {
-                                query = ""
-                            }
-                        },
-                        content = { Icon(Icons.Outlined.Close, contentDescription = "") }
-                    )
-                }
+    Scaffold(
+        topBar = {
+            Box(Modifier.fillMaxWidth()) {
+                SearchBar(
+                    modifier = Modifier.align(Alignment.Center),
+                    query = query,
+                    onQueryChange = { query = it },
+                    onSearch = {},
+                    active = active,
+                    onActiveChange = { active = it },
+                    placeholder = { Text(text = stringResource(id = R.string.text_home_search_hint)) },
+                    leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = "") },
+                    trailingIcon = {
+                        AnimatedVisibility(active, enter = fadeIn(), exit = fadeOut()) {
+                            IconButton(
+                                onClick = {
+                                    if (query.isEmpty()) {
+                                        active = false
+                                    } else {
+                                        query = ""
+                                    }
+                                },
+                                content = { Icon(Icons.Outlined.Close, contentDescription = "") }
+                            )
+                        }
+                    }
+                ) {}
             }
-        ) {
-
         }
-
-        Column(
-            Modifier
-                .padding(innerPadding)
-                .padding(top = 72.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
+    ) {
+        Column(Modifier.padding(it)) {
             Text(
                 text = stringResource(id = R.string.label_personal_recommendations),
                 style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
@@ -179,7 +171,8 @@ private fun RecommendationItem(
 
 @Composable
 private fun HomePrimaryActions() {
-    val model = viewModel<AppViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
+    val model =
+        viewModel<AppViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
     Row(Modifier.padding(horizontal = PaddingCommon)) {
         PrimaryActionCard(
             icon = { Icon(Icons.Outlined.AutoAwesome, contentDescription = "") },
@@ -248,9 +241,7 @@ private fun PrimaryActionCard(
 @Composable
 fun AppPreview() {
     ExypnosTheme {
-        HomeApp(
-            innerPadding = PaddingValues()
-        )
+        HomeApp()
     }
 }
 
@@ -262,8 +253,6 @@ fun AppPreview() {
 @Composable
 fun AppPreviewLandscape() {
     ExypnosTheme {
-        HomeApp(
-            innerPadding = PaddingValues()
-        )
+        HomeApp()
     }
 }
