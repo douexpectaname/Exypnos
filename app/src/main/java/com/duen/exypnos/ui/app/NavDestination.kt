@@ -44,7 +44,11 @@ enum class NavDestination(
                 contentDescription = ""
             )
         },
-        { p -> }
+        { p ->
+            composable("learn") {
+
+            }
+        }
     ),
     DISCOVER(
         R.string.label_discover,
@@ -54,13 +58,21 @@ enum class NavDestination(
                 contentDescription = ""
             )
         },
-        { p -> }
+        { p ->
+            composable("discover") {
+
+            }
+        }
     ),
     ACCOUNT(
         R.string.label_account,
         {
             Icon(Icons.Outlined.Person, contentDescription = "")
         },
-        { p -> }
+        { p ->
+            composable("account") {
+
+            }
+        }
     )
 }
