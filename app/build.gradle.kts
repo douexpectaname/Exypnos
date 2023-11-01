@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -57,8 +58,10 @@ android {
 dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+    ksp(libs.lifecycle.compiler)
     implementation(libs.activity.compose)
-    implementation(libs.androidx.appcompat)
+    implementation(libs.appcompat)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
@@ -69,6 +72,12 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.material.icon.extended)
     implementation(libs.paging.compose)
+    ksp(libs.room.compiler)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
+    implementation(libs.viewmodel)
+    implementation(libs.window)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

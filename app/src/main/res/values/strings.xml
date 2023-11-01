@@ -10,4 +10,5 @@
     <string name="action_doctor">Doctor</string>
     <string name="action_constitution">Constitution</string>
     <string name="label_personal_recommendations">personal recommendations</string>
+    <string name="title_prescription">Prescription</string>
 </resources>

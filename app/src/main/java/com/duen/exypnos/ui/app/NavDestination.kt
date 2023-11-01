@@ -6,21 +6,35 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material3.Icon
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.duen.exypnos.R
 import com.duen.exypnos.ui.home.HomeApp
+import com.duen.exypnos.ui.home.PrescriptionMakerApp
 
-enum class NavigationDestination(
+enum class NavDestination(
     val nameId: Int,
     val icon: @Composable () -> Unit,
-    val destination: @Composable (WindowSizeClass, PaddingValues) -> Unit
+    val builder: NavGraphBuilder.(PaddingValues) -> Unit
 ) {
     HOME(
         R.string.label_home,
         { Icon(Icons.Outlined.Home, contentDescription = "") },
-        { w, p -> HomeApp(w, p) }
+        { p ->
+            navigation("root", "home") {
+                composable("root") {
+                    HomeApp(p)
+                }
+                navigation("generate", "prescription") {
+                    composable("generate") {
+                        PrescriptionMakerApp(p)
+                    }
+                }
+            }
+        }
     ),
     LEARN(
         R.string.label_learn,
@@ -30,7 +44,7 @@ enum class NavigationDestination(
                 contentDescription = ""
             )
         },
-        { w, p -> }
+        { p -> }
     ),
     DISCOVER(
         R.string.label_discover,
@@ -40,13 +54,13 @@ enum class NavigationDestination(
                 contentDescription = ""
             )
         },
-        { w, p -> }
+        { p -> }
     ),
     ACCOUNT(
         R.string.label_account,
         {
             Icon(Icons.Outlined.Person, contentDescription = "")
         },
-        { w, p -> }
+        { p -> }
     )
 }

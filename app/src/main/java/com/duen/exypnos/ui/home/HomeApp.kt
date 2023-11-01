@@ -1,11 +1,13 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.duen.exypnos.ui.home
 
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -41,8 +43,6 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -51,20 +51,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.duen.exypnos.R
+import com.duen.exypnos.ui.app.AppViewModel
+import com.duen.exypnos.ui.app.NavigationCommand
 import com.duen.exypnos.ui.theme.ExypnosTheme
 import com.duen.exypnos.ui.theme.PaddingCommon
 import com.duen.exypnos.ui.theme.PaddingSmall
 
 @Composable
-fun HomeApp(windowSize: WindowSizeClass, innerPadding: PaddingValues) {
+fun HomeApp(innerPadding: PaddingValues) {
     var query by remember {
         mutableStateOf("")
     }
@@ -114,7 +117,10 @@ fun HomeApp(windowSize: WindowSizeClass, innerPadding: PaddingValues) {
             Text(
                 text = stringResource(id = R.string.label_personal_recommendations),
                 style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
-                modifier = Modifier.padding(start = PaddingCommon + PaddingSmall, bottom = PaddingSmall)
+                modifier = Modifier.padding(
+                    start = PaddingCommon + PaddingSmall,
+                    bottom = PaddingSmall
+                )
             )
             HomeRecommendations()
             HomePrimaryActions()
@@ -134,7 +140,8 @@ private fun HomeRecommendations() {
                 colorScheme.primary to Icons.Default.AcUnit,
                 colorScheme.tertiary to Icons.Default.Notifications,
                 colorScheme.secondaryContainer to Icons.Default.AccountBalanceWallet,
-                colorScheme.error to Icons.Default.Notifications)
+                colorScheme.error to Icons.Default.Notifications
+            )
         ) {
             RecommendationItem(
                 avatar = {
@@ -150,7 +157,7 @@ private fun HomeRecommendations() {
                     }
                 },
                 label = { Text("recommendation") },
-                modifier = Modifier.padding(PaddingSmall)
+                modifier = Modifier.padding(PaddingSmall),
             )
         }
     }
@@ -172,6 +179,7 @@ private fun RecommendationItem(
 
 @Composable
 private fun HomePrimaryActions() {
+    val model = viewModel<AppViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
     Row(Modifier.padding(horizontal = PaddingCommon)) {
         PrimaryActionCard(
             icon = { Icon(Icons.Outlined.AutoAwesome, contentDescription = "") },
@@ -179,6 +187,9 @@ private fun HomePrimaryActions() {
             modifier = Modifier
                 .weight(0.5f)
                 .padding(PaddingSmall)
+                .clickable {
+                    model.navigate(NavigationCommand.Route("prescription"))
+                }
         )
         PrimaryActionCard(
             icon = { Icon(Icons.Outlined.FindInPage, contentDescription = "") },
@@ -214,7 +225,7 @@ private fun PrimaryActionCard(
 ) {
     Card(
         modifier,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
     ) {
         Row(Modifier.padding(PaddingCommon)) {
             Box(Modifier.align(Alignment.CenterVertically)) {
@@ -238,7 +249,6 @@ private fun PrimaryActionCard(
 fun AppPreview() {
     ExypnosTheme {
         HomeApp(
-            windowSize = WindowSizeClass.calculateFromSize(DpSize(420.dp, 1000.dp)),
             innerPadding = PaddingValues()
         )
     }
@@ -253,7 +263,6 @@ fun AppPreview() {
 fun AppPreviewLandscape() {
     ExypnosTheme {
         HomeApp(
-            windowSize = WindowSizeClass.calculateFromSize(DpSize(10000.dp, 420.dp)),
             innerPadding = PaddingValues()
         )
     }
