@@ -17,6 +17,7 @@ room = "2.6.0"
 ksp = "1.9.0-1.0.13"
 view-model = "2.6.2"
 window = "1.1.0"
+constraintlayout = "1.0.1"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -47,6 +48,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "view-model" }
 window = { group = "androidx.window", name = "window", version.ref = "window" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

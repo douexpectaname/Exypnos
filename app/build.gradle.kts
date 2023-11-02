@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.room.paging)
     implementation(libs.viewmodel)
     implementation(libs.window)
+    implementation(libs.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
