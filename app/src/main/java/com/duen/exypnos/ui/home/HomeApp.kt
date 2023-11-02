@@ -8,12 +8,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,7 +40,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -54,9 +54,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.isTraversalGroup
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -75,37 +72,39 @@ fun HomeApp() {
     var active by remember {
         mutableStateOf(false)
     }
-    Scaffold(
-        topBar = {
-            Box(Modifier.fillMaxWidth()) {
-                SearchBar(
-                    modifier = Modifier.align(Alignment.Center),
-                    query = query,
-                    onQueryChange = { query = it },
-                    onSearch = {},
-                    active = active,
-                    onActiveChange = { active = it },
-                    placeholder = { Text(text = stringResource(id = R.string.text_home_search_hint)) },
-                    leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = "") },
-                    trailingIcon = {
-                        AnimatedVisibility(active, enter = fadeIn(), exit = fadeOut()) {
-                            IconButton(
-                                onClick = {
-                                    if (query.isEmpty()) {
-                                        active = false
-                                    } else {
-                                        query = ""
-                                    }
-                                },
-                                content = { Icon(Icons.Outlined.Close, contentDescription = "") }
-                            )
-                        }
-                    }
-                ) {}
+    val appViewModel =
+        viewModel<AppViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
+    Box {
+        SearchBar(
+            modifier = Modifier.align(Alignment.TopCenter),
+            query = query,
+            onQueryChange = { query = it },
+            onSearch = {},
+            active = active,
+            onActiveChange = { active = it },
+            placeholder = { Text(text = stringResource(id = R.string.text_home_search_hint)) },
+            leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = "") },
+            trailingIcon = {
+                AnimatedVisibility(active, enter = fadeIn(), exit = fadeOut()) {
+                    IconButton(
+                        onClick = {
+                            if (query.isEmpty()) {
+                                active = false
+                            } else {
+                                query = ""
+                            }
+                        },
+                        content = { Icon(Icons.Outlined.Close, contentDescription = "") }
+                    )
+                }
             }
-        }
-    ) {
-        Column(Modifier.padding(it)) {
+        ) {}
+        Column(
+            Modifier
+                .padding(appViewModel.innerPadding)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(70.dp))
             Text(
                 text = stringResource(id = R.string.label_personal_recommendations),
                 style = MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary),
@@ -177,12 +176,12 @@ private fun HomePrimaryActions() {
         PrimaryActionCard(
             icon = { Icon(Icons.Outlined.AutoAwesome, contentDescription = "") },
             label = { Text(text = stringResource(id = R.string.action_prescription)) },
+            onClick = {
+                model.navigate(NavigationCommand.Route("prescription"))
+            },
             modifier = Modifier
                 .weight(0.5f)
                 .padding(PaddingSmall)
-                .clickable {
-                    model.navigate(NavigationCommand.Route("prescription"))
-                }
         )
         PrimaryActionCard(
             icon = { Icon(Icons.Outlined.FindInPage, contentDescription = "") },
@@ -214,10 +213,12 @@ private fun HomePrimaryActions() {
 private fun PrimaryActionCard(
     icon: @Composable () -> Unit,
     label: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Card(
-        modifier,
+        modifier = modifier,
+        onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
     ) {
         Row(Modifier.padding(PaddingCommon)) {

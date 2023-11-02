@@ -1,5 +1,6 @@
 package com.duen.exypnos.ui.app
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -17,6 +18,7 @@ class AppViewModel(windowSize: WindowSizeClass) : ViewModel() {
     private val _navigation = MutableStateFlow<NavigationCommand>(NavigationCommand.Halt)
     val navigation: StateFlow<NavigationCommand> get() = _navigation
     var windowSize by mutableStateOf(windowSize)
+    var innerPadding by mutableStateOf(PaddingValues())
 
     fun navigate(command: NavigationCommand) {
         _navigation.value = command

@@ -1,6 +1,5 @@
 package com.duen.exypnos.ui.app
 
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,6 +11,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -20,6 +20,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -49,37 +50,61 @@ fun MainApp() {
         }
     }
 
-    Row {
-        if (appViewModel.windowSize.widthSizeClass >= WindowWidthSizeClass.Expanded) {
-            MainRailBar(navController)
+    when (appViewModel.windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            CompatScreen(navController)
         }
 
-        Scaffold(
-            bottomBar = {
-                if (appViewModel.windowSize.widthSizeClass < WindowWidthSizeClass.Expanded) {
-                    MainBottomBar(navController)
-                }
-            },
-        ) { _ ->
-            NavHost(
-                navController = navController,
-                startDestination = NavDestination.HOME.name.lowercase(),
-            ) {
-                NavDestination.entries.forEach { dest ->
-                    dest.builder(this)
-                }
-            }
+        WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> {
+            MediumAndExpandedScreen(navController)
         }
     }
 }
 
 @Composable
-private fun MainBottomBar(navController: NavController) {
+private fun CompatScreen(navController: NavHostController) {
+    val appViewModel = viewModel<AppViewModel>()
+    Scaffold(
+        bottomBar = {
+            MainBottomBar(navController)
+        }
+    ) {
+        appViewModel.innerPadding = it
+        NavContent(navController)
+    }
+}
+
+@Composable
+private fun MediumAndExpandedScreen(navController: NavHostController) {
+    val appViewModel = viewModel<AppViewModel>()
+    Row {
+        MainRailBar(navController)
+        Scaffold {
+            appViewModel.innerPadding = it
+            NavContent(navController)
+        }
+    }
+}
+
+@Composable
+private fun NavContent(navController: NavHostController, modifier: Modifier = Modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = NavDestination.HOME.name.lowercase(),
+        modifier = modifier
+    ) {
+        NavDestination.entries.forEach { dest ->
+            dest.builder(this)
+        }
+    }
+}
+
+@Composable
+private fun MainBottomBar(navController: NavController, modifier: Modifier = Modifier) {
     val current by navController.currentBackStackEntryAsState()
 
-    NavigationBar {
+    NavigationBar(modifier) {
         NavDestination.entries.forEach {
-            Log.d("selected", "$it ${current?.destination?.hierarchy?.toList()}")
             NavigationBarItem(
                 selected = it.selected(current),
                 onClick = { it.onClick(navController) },
@@ -91,10 +116,10 @@ private fun MainBottomBar(navController: NavController) {
 }
 
 @Composable
-private fun MainRailBar(navController: NavController) {
+private fun MainRailBar(navController: NavController, modifier: Modifier = Modifier) {
     val current by navController.currentBackStackEntryAsState()
 
-    NavigationRail {
+    NavigationRail(modifier) {
         NavDestination.entries.forEach {
             NavigationRailItem(
                 selected = it.selected(current),
